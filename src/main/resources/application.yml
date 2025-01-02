@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: oak store
+  datasource:
+    url: jdbc:postgresql://localhost:5432/oak_store_db
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
