@@ -1,0 +1,6 @@
+required:
+  name: Name is required
+  description: Description is required
+  price: Price is required
+  category: Category is required
+  stockQuantity: Stock quantity is required
