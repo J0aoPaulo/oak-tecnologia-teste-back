@@ -1,15 +1,19 @@
 package com.api.oak_store.service;
 
 import com.api.oak_store.controller.dto.CreateProductRequest;
+import com.api.oak_store.controller.dto.ProductResponse;
 import com.api.oak_store.controller.dto.UpdateProductRequest;
 import com.api.oak_store.entity.Product;
 import com.api.oak_store.exception.ProductAlreadyExist;
 import com.api.oak_store.exception.ProductNotFound;
 import com.api.oak_store.repository.ProductRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
@@ -35,14 +39,25 @@ public class ProductService {
                 .findById(productId)
                 .orElseThrow(() -> new ProductNotFound("Product with id: " + productId + "not found"));
 
-        product.setName(Optional.ofNullable(request.name()).orElse(product.getName()));
-        product.setDescription(Optional.ofNullable(request.description()).orElse(product.getDescription()));
-        product.setPrice(Optional.ofNullable(request.price()).orElse(product.getPrice()));
-        product.setAvailable(Optional.ofNullable(request.available()).orElse(product.getAvailable()));
-        product.setCategory(Optional.ofNullable(request.category()).orElse(product.getCategory()));
-        product.setStockQuantity(Optional.ofNullable(request.stockQuantity()).orElse(product.getStockQuantity()));
-        product.setUpdatedAt(Optional.ofNullable(request.updateAt()).orElse(product.getUpdatedAt()));
-
+        updateProductField(product, request);
         return repository.save(product);
+    }
+
+    private void updateProductField(Product product, UpdateProductRequest request) {
+        Optional.ofNullable(request.name()).ifPresent(product::setName);
+        Optional.ofNullable(request.description()).ifPresent(product::setDescription);
+        Optional.ofNullable(request.price()).ifPresent(product::setPrice);
+        Optional.ofNullable(request.available()).ifPresent(product::setAvailable);
+        Optional.ofNullable(request.category()).ifPresent(product::setCategory);
+        Optional.ofNullable(request.stockQuantity()).ifPresent(product::setStockQuantity);
+        Optional.ofNullable(request.updateAt()).ifPresent(product::setUpdatedAt);
+    }
+
+    public List<ProductResponse> getAllProducts() {
+        return repository
+                .findAll()
+                .stream()
+                .map(this.mapper::fromProduct)
+                .collect(Collectors.toList());
     }
 }

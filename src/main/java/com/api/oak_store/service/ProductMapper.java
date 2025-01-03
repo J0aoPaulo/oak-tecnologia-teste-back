@@ -1,7 +1,7 @@
 package com.api.oak_store.service;
 
 import com.api.oak_store.controller.dto.CreateProductRequest;
-import com.api.oak_store.controller.dto.UpdateProductRequest;
+import com.api.oak_store.controller.dto.ProductResponse;
 import com.api.oak_store.entity.Product;
 import org.springframework.stereotype.Service;
 
@@ -31,10 +31,17 @@ public class ProductMapper {
         return productName.substring(0, 3).toUpperCase() + "-" + UUID.randomUUID().toString().substring(0, 8);
     }
 
-    public Product updateProductRequest(Product product, UpdateProductRequest request) {
-        return Product.builder()
-                .name()
+    public ProductResponse fromProduct(Product product) {
+        return new ProductResponse(
+                product.getName(),
+                product.getDescription(),
+                product.getPrice(),
+                product.getAvailable(),
+                product.getCategory(),
+                product.getSku(),
+                product.getStockQuantity(),
+                product.getCreatedAt(),
+                product.getUpdatedAt()
+        );
     }
-
-    private <T> T va
 }

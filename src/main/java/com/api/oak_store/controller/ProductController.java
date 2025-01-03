@@ -1,24 +1,28 @@
 package com.api.oak_store.controller;
 
 import com.api.oak_store.controller.dto.CreateProductRequest;
+import com.api.oak_store.controller.dto.ProductResponse;
 import com.api.oak_store.controller.dto.UpdateProductRequest;
+import com.api.oak_store.repository.ProductRepository;
 import com.api.oak_store.service.ProductService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
-import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 import java.util.UUID;
 
 @RestController("/api/v1/product")
 public class ProductController {
 
     private final ProductService service;
+    private final ProductRepository repository;
 
-    public ProductController(ProductService service) {
+    public ProductController(ProductService service, ProductRepository repository) {
         this.service = service;
+        this.repository = repository;
     }
 
     @PostMapping
@@ -38,5 +42,17 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<>
+    public ResponseEntity<List<ProductResponse>> getAllProducts() {
+        return ResponseEntity.ok(service.getAllProducts());
+    }
+
+    @DeleteMapping("{productId}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable("productId") UUID productId) {
+        if(repository.existsById(productId)) {
+            repository.deleteById(productId);
+            return ResponseEntity.ok().build();
+        }
+
+        return ResponseEntity.notFound().build();
+    }
 }
