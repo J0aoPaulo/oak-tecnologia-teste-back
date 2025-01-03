@@ -4,7 +4,6 @@ import com.api.oak_store.entity.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.lang.ScopedValue;
 import java.util.UUID;
 
 @Repository
