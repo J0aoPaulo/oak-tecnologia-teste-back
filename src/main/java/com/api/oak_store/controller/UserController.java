@@ -43,7 +43,7 @@ public class UserController {
             var expiresIn = 3000L;
 
             var claims = JwtClaimsSet.builder()
-                    .issuer("rest-api-forum")
+                    .issuer("oak-store")
                     .subject(costumer.getCostumerId().toString())
                     .issuedAt(Instant.now())
                     .expiresAt(Instant.now().plusSeconds(expiresIn))
