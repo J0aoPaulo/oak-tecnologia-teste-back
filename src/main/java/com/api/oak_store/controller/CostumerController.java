@@ -46,7 +46,7 @@ public class CostumerController {
 
     @GetMapping("/{costumerId}")
     public ResponseEntity<CostumerResponse> getCostumerById(@PathVariable UUID costumerId) {
-        return ResponseEntity.of(service.getCostumerById(costumerId));
+        return ResponseEntity.ok(service.getCostumerById(costumerId));
     }
 
     @DeleteMapping("/{costumerId}")
