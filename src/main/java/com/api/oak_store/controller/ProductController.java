@@ -30,16 +30,14 @@ public class ProductController {
     @Transactional
     public ResponseEntity<Void> createProduct(@Valid CreateProductRequest request) {
         var productId = service.createProduct(request);
-
-        return ResponseEntity.created(URI.create("/api/v1/product/" + productId)).build();
+        return ResponseEntity.created(URI.create("/api/v1/products/" + productId)).build();
     }
 
     @PutMapping("/{productId}")
     @Transactional
-    public ResponseEntity<UpdateProductRequest> updateProduct(@PathVariable UUID productId, UpdateProductRequest request) {
-        var userUpdated = service.updateProduct(productId, request);
-
-        return ResponseEntity.ok(new UpdateProductRequest(userUpdated));
+    public ResponseEntity<ProductResponse> updateProduct(@PathVariable UUID productId, @Valid @RequestBody UpdateProductRequest request) {
+        var updatedProduct = service.updateProduct(productId, request);
+        return ResponseEntity.ok(new ProductResponse(updatedProduct));
     }
 
     @GetMapping

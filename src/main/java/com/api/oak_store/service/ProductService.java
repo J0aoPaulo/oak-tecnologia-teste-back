@@ -5,9 +5,8 @@ import com.api.oak_store.controller.dto.ProductResponse;
 import com.api.oak_store.controller.dto.UpdateProductRequest;
 import com.api.oak_store.entity.Product;
 import com.api.oak_store.exception.ProductAlreadyExist;
-import com.api.oak_store.exception.ProductNotFound;
+import com.api.oak_store.exception.ProductNotFoundException;
 import com.api.oak_store.repository.ProductRepository;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -37,7 +36,7 @@ public class ProductService {
     public Product updateProduct(UUID productId, UpdateProductRequest request) {
         var product = repository
                 .findById(productId)
-                .orElseThrow(() -> new ProductNotFound("Product with id: " + productId + "not found"));
+                .orElseThrow(() -> new ProductNotFoundException("Product with id: " + productId + "not found"));
 
         updateProductField(product, request);
         return repository.save(product);
