@@ -11,3 +11,9 @@ spring:
       ddl-auto: update
     show-sql: true
     open-in-view: false
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          public-key-location: classpath:public.key
+          private-key-location: classpath:private.key
