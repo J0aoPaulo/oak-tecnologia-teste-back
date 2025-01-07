@@ -20,14 +20,18 @@ Este projeto tem como objetivo implementar uma API RESTful que permite realizar 
 ## Estrutura do Projeto
 
 - **/src/main/java/com/api/oak_store**: Contém o código-fonte do projeto.
-    - **config**: Configurações da aplicação, como segurança e JWT.
-    - **controller**: Contém os controladores da API.
-    - **controller/dto**: Contém os objetos de transferência de dados (DTOs).
-    - **service**: Contém a lógica de negócios.
-    - **repository**: Contém os repositórios JPA para acesso ao banco de dados.
+  - **config**: Configurações da aplicação, como segurança e JWT.
+  - **controller**: Contém os controladores da API.
+  - **controller/dto**: Contém os objetos de transferência de dados (DTOs).
+  - **service**: Contém a lógica de negócios.
+  - **repository**: Contém os repositórios JPA para acesso ao banco de dados.
+  - **entity**: Contém as entidades JPA que representam as tabelas do banco de dados.
+  - **exception**: Contém as classes de exceção personalizadas usadas na aplicação.
+  - **mapper**: Contém as classes de mapeamento entre entidades e DTOs.
 
 - **/src/main/resources**: Contém arquivos de configuração e recursos da aplicação.
-    - **application.properties**: Configurações do Spring Boot, como conexão com o banco de dados, JWT e outras propriedades da aplicação.
+  - **application.properties**: Configurações do Spring Boot, como conexão com o banco de dados, JWT e outras propriedades da aplicação.
+  - **data.sql**: Script SQL para popular o banco de dados com dados iniciais.
 
 ## Funcionalidades
 
@@ -46,7 +50,11 @@ Este projeto tem como objetivo implementar uma API RESTful que permite realizar 
 - **POST** `/api/v1/products`: Criação de um novo produto.
 - **PUT** `/api/v1/products/{productId}`: Atualização de um produto existente.
 - **GET** `/api/v1/products`: Listagem de todos os produtos.
+- **GET** `/api/v1/products/{productId}`: Obter um produto pelo ID.
 - **DELETE** `/api/v1/products/{productId}`: Exclusão de um produto pelo ID.
+- **GET** `/api/v1/products/search`: Pesquisa de produtos por nome.
+- **GET** `/api/v1/products/filter`: Filtragem de produtos por faixa de preço.
+- **GET** `/api/v1/products/top-expensive`: Listagem dos produtos mais caros.
 
 #### Autenticação
 
