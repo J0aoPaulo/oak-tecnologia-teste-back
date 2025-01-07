@@ -3,6 +3,7 @@ package com.api.oak_store.controller;
 import com.api.oak_store.controller.dto.CreateProductRequest;
 import com.api.oak_store.controller.dto.ProductResponse;
 import com.api.oak_store.controller.dto.UpdateProductRequest;
+import com.api.oak_store.entity.Product;
 import com.api.oak_store.repository.ProductRepository;
 import com.api.oak_store.service.ProductService;
 import jakarta.transaction.Transactional;
@@ -10,7 +11,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,10 +28,11 @@ public class ProductController {
     }
 
     @PostMapping
-    @Transactional
-    public ResponseEntity<Void> createProduct(@Valid CreateProductRequest request) {
-        var productId = service.createProduct(request);
-        return ResponseEntity.created(URI.create("/api/v1/products/" + productId)).build();
+    public ResponseEntity<List<Product>> createProduct(@RequestBody @Valid CreateProductRequest request) {
+        service.createProduct(request);
+
+        List<Product> updatedList = repository.findAllByOrderByPriceAsc();
+        return ResponseEntity.ok(updatedList);
     }
 
     @PutMapping("/{productId}")
@@ -41,8 +43,29 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ProductResponse>> getAllProducts() {
+    public ResponseEntity<List<ProductResponse>> getAllProductsList() {
         return ResponseEntity.ok(service.getAllProducts());
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<Product>> searchProductsByName(@RequestParam String name) {
+        List<Product> productByName = service.searchProductByName(name);
+        return ResponseEntity.ok(productByName);
+    }
+
+    @GetMapping("/filter")
+    public ResponseEntity<List<Product>> filterProductsByValue(
+            @RequestParam BigDecimal minValue,
+            @RequestParam BigDecimal maxValue) {
+        List<Product> products = service.filterProductsByValue(minValue, maxValue);
+
+        return ResponseEntity.ok(products);
+    }
+
+    @GetMapping("/top-expensive")
+    public ResponseEntity<List<Product>> getTopExpensiveProducts(@RequestParam int limit) {
+        List<Product> products = service.getTopExpensive(limit);
+        return ResponseEntity.ok(products);
     }
 
     @DeleteMapping("{productId}")
