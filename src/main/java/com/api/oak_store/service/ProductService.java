@@ -9,6 +9,7 @@ import com.api.oak_store.exception.ProductNotFoundException;
 import com.api.oak_store.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -27,16 +28,17 @@ public class ProductService {
 
     public UUID createProduct(CreateProductRequest request) {
         if(repository.existsByName(request.name()))
-            throw new ProductAlreadyExist("Product with name: " + request.name() + "already created");
+            throw new ProductAlreadyExist("Product with name: " + request.name() + " already created");
 
-        var user = mapper.toProduct(request);
-        return user.getProductId();
+        var product = mapper.toProduct(request);
+        repository.save(product);
+        return product.getProductId();
     }
 
     public Product updateProduct(UUID productId, UpdateProductRequest request) {
         var product = repository
                 .findById(productId)
-                .orElseThrow(() -> new ProductNotFoundException("Product with id: " + productId + "not found"));
+                .orElseThrow(() -> new ProductNotFoundException("Product with id: " + productId + " not found"));
 
         updateProductField(product, request);
         return repository.save(product);
@@ -58,5 +60,17 @@ public class ProductService {
                 .stream()
                 .map(this.mapper::fromProduct)
                 .collect(Collectors.toList());
+    }
+
+    public List<Product> searchProductByName(String name) {
+        return repository.findByNameContainingIgnoreCase(name);
+    }
+
+    public List<Product> filterProductsByValue(BigDecimal minValue, BigDecimal maxValue) {
+        return repository.findByPriceBetween(minValue, maxValue);
+    }
+
+    public List<Product> getTopExpensive(int limit) {
+        return repository.findTopExpensiveProducts(limit);
     }
 }
